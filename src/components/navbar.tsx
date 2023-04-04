@@ -1,6 +1,6 @@
-import { Box, Flex, Text, Link } from '@chakra-ui/react';
+import { Box, Flex, Text, Link, Spacer } from '@chakra-ui/react';
+import Search from '@/components/search';
 import { useRouter } from 'next/router';
-import NextLink from 'next/link';
 
 interface PathType {
     path: string,
@@ -26,10 +26,11 @@ const NavBar = () => {
 
   return (
     <Box bg="gray.700" py={4}>
-      <Flex>
+      <Flex alignItems="center">
         {paths.map((pathObj, index) => (
-          <NextLink key={index} href={pathObj.path}>
             <Link
+              key={index}
+              href={pathObj.path}
               mx={4}
               fontWeight={router.pathname === pathObj.path ? 'bold' : 'normal'}
               fontSize="lg"
@@ -37,8 +38,8 @@ const NavBar = () => {
             >
               {pathObj.label}
             </Link>
-          </NextLink>
         ))}
+        <Search/>
       </Flex>
     </Box>
   );
