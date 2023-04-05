@@ -11,12 +11,14 @@ import { Movie } from '@/types/rapidapi-movies';
 import MovieList from './movie-list';
 import { bookmarkStore } from '@/lib/store';
 import { BookmarkedMovie } from '@/types';
+import { useRouter } from 'next/router';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [results, setResults] = useState<Movie[]>([]);
 
   const ref = useRef();
+  const router = useRouter();
 
   useOutsideClick({
     ref: ref,
@@ -39,6 +41,11 @@ const Search = () => {
     } else {
       bookmarkStore.getState().addMovie(bookmarkMovie);
     }
+  }
+
+  const routeToMoviePage = (imdbID: string) => {
+    setResults([])
+    router.push(`/movie/${imdbID}`)
   }
 
   const handleChange = (event) => {
@@ -78,8 +85,8 @@ const Search = () => {
           </Button>
         </Flex>
       </form>
-      <div style={{position: 'relative'}} ref={ref}>
-        <MovieList movieList={results} onClick={toggleMovieBookmark}/>
+      <div style={{position: 'relative', zIndex: 10}} ref={ref} >
+        <MovieList movieList={results} bookmarkAction={toggleMovieBookmark} routeToMoviePage={routeToMoviePage}/>
       </div>
     </Box>
   );

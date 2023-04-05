@@ -6,6 +6,6 @@ export interface BookmarkSlice {
     movies: BookmarkedMovie[],
     fetchById: (imdbID: string) => BookmarkedMovie | undefined,
     removeMovie: (imdbID: string) => void,
-    addMovie: (movie: BookmarkedMovie) => void   
-
+    addMovie: (movie: BookmarkedMovie) => void,
+    updateMovie: (imdbID: string, mov: BookmarkedMovie) => void,
 }

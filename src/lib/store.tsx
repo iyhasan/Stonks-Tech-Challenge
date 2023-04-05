@@ -30,6 +30,22 @@ export const bookmarkStore = create<BookmarkSlice>()(
                         movies: [newMov ,...state.movies]
                     }
                 )})
+            },
+            updateMovie: (imdbID: string, updatedMov: BookmarkedMovie) => {
+                set((state) => 
+                    {
+                        const newMovies = state.movies.map((mov) => {
+                            if (mov.imdbID !== imdbID) return mov;
+                            return updatedMov
+                        });
+
+                        return {
+                            movies: newMovies
+                        };
+
+
+                    }
+                )
             }
         }),
         {

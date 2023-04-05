@@ -1,6 +1,6 @@
 // Not generic - should only be used by search component due to 
 // weird styling
-import { Movie } from "@/types/rapidapi-movies"
+import { Movie } from "@/types/rapidapi-movies";
 import {
     Box,
     Text,
@@ -10,27 +10,28 @@ import {
     Center,
     IconButton,
 } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons'
+import { AddIcon } from '@chakra-ui/icons';
 import { bookmarkStore } from "@/lib/store";
 
 interface MovieListProps {
     movieList: Movie[],
-    onClick: (mov: Movie) => void,
+    bookmarkAction: (mov: Movie) => void,
+    routeToMoviePage: (imdbID: string) => void,
 }
 
-function MovieList({ movieList, onClick }: MovieListProps) {
-
-    
+function MovieList({ movieList, bookmarkAction, routeToMoviePage }: MovieListProps) {
+  
     if (movieList.length === 0) {
         return null
     }
 
     // keep movies in movieList that are bookmarked
     const intersectionMovies = bookmarkStore(
-                                (state) => movieList
-                                           .filter((mov) => state.movies.find((bookmarkedMov) => mov.imdbID === bookmarkedMov.imdbID))
-                                )
+        (state) => movieList
+                    .filter((mov) => state.movies.find((bookmarkedMov) => mov.imdbID === bookmarkedMov.imdbID))
+        );
 
+    
     return (
         <SimpleGrid columns={1} position='absolute' w='100%' background="white" maxHeight="500px" overflowY="scroll">
           {movieList.map((result, index) => {
@@ -47,7 +48,8 @@ function MovieList({ movieList, onClick }: MovieListProps) {
                   backgroundColor: 'gray.800',
                   color: 'white',
                   cursor: 'pointer'
-                }}>
+                }}
+                onClick={() => routeToMoviePage(result.imdbID)}>
                 <Flex flexDirection="row">
                   <Image src={result.Poster} alt={'Img missing'} height='80px' width='80px'/>
                   <Box ml={3}>
@@ -58,8 +60,11 @@ function MovieList({ movieList, onClick }: MovieListProps) {
                     <IconButton 
                       aria-label="Bookmark Movie"
                       variant="outline"
-                      icon={<StarIcon color={bookmarkIconColor}/>}
-                      onClick={() => onClick(result)}
+                      icon={<AddIcon color={bookmarkIconColor}/>}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        bookmarkAction(result);
+                      }}
                       _hover={{
                         backgroundColor: 'gray.100'
                       }} />
