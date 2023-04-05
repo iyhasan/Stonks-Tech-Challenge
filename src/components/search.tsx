@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Box,
   Input,
   Button,
   Flex,
+  useOutsideClick,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons'
 import { Movie } from '@/types/rapidapi-movies';
@@ -11,15 +12,20 @@ import MovieList from './movie-list';
 import { bookmarkStore } from '@/lib/store';
 import { BookmarkedMovie } from '@/types';
 
-
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [results, setResults] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [bookmarkedMovieIDs, setBookmarkedMovieIDs] = useState<string[]>([])
+
+  const ref = useRef();
+
+  useOutsideClick({
+    ref: ref,
+    handler: () => setResults([]),
+  })
 
 
-  const addMovieToBookmark = (mov: Movie) => {
+
+  const toggleMovieBookmark = (mov: Movie) => {
     const bookmarkMovie: BookmarkedMovie = {
       movie: mov,
       imdbID: mov.imdbID,
@@ -28,9 +34,11 @@ const Search = () => {
       isWatched: false
     }
 
-    console.log('added movie', bookmarkMovie)
-
-    bookmarkStore.getState().addMovie(bookmarkMovie);
+    if (bookmarkStore.getState().fetchById(mov.imdbID)) {
+      bookmarkStore.getState().removeMovie(mov.imdbID);
+    } else {
+      bookmarkStore.getState().addMovie(bookmarkMovie);
+    }
   }
 
   const handleChange = (event) => {
@@ -38,7 +46,6 @@ const Search = () => {
   };
 
   const searchMovies = async () => {
-    setLoading(true);
     // Replace the URL below with the actual API endpoint URL
     const response = await fetch(`/api/search?s=${searchTerm}`);
     const data = await response.json();
@@ -48,7 +55,6 @@ const Search = () => {
     } else {
       setResults([])
     }
-    setLoading(false);
   };
 
   const handleSubmit = (event) => {
@@ -72,8 +78,8 @@ const Search = () => {
           </Button>
         </Flex>
       </form>
-      <div style={{position: 'relative'}}>
-        <MovieList movieList={results} onClick={addMovieToBookmark}/>
+      <div style={{position: 'relative'}} ref={ref}>
+        <MovieList movieList={results} onClick={toggleMovieBookmark}/>
       </div>
     </Box>
   );
