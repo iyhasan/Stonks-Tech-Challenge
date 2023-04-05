@@ -8,12 +8,30 @@ import {
 import { SearchIcon } from '@chakra-ui/icons'
 import { Movie } from '@/types/rapidapi-movies';
 import MovieList from './movie-list';
+import { bookmarkStore } from '@/lib/store';
+import { BookmarkedMovie } from '@/types';
 
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [results, setResults] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [bookmarkedMovieIDs, setBookmarkedMovieIDs] = useState<string[]>([])
+
+
+  const addMovieToBookmark = (mov: Movie) => {
+    const bookmarkMovie: BookmarkedMovie = {
+      movie: mov,
+      imdbID: mov.imdbID,
+      rating: 0,
+      review: '',
+      isWatched: false
+    }
+
+    console.log('added movie', bookmarkMovie)
+
+    bookmarkStore.getState().addMovie(bookmarkMovie);
+  }
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -55,7 +73,7 @@ const Search = () => {
         </Flex>
       </form>
       <div style={{position: 'relative'}}>
-        <MovieList movieList={results} />
+        <MovieList movieList={results} onClick={addMovieToBookmark}/>
       </div>
     </Box>
   );
