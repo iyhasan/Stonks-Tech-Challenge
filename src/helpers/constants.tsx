@@ -11,5 +11,8 @@ export const COLOR_SCHEMES = {
     secondary: "#141414",
     third: "#2e3239",
     fontMain: "white",
-    yellow: "yellow.400"
+    yellow: "yellow.400",
+    gray: "gray.500",
+    green: "#4dad03",
+    white: "white",
 }

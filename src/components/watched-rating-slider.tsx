@@ -3,6 +3,7 @@ import { bookmarkStore } from "@/lib/store";
 import { BookmarkedMovie } from "@/types";
 import { StarIcon, ViewIcon } from "@chakra-ui/icons";
 import { Box, Slide, VStack, Button, Text, Flex, IconButton, Center} from "@chakra-ui/react";
+import { COLOR_SCHEMES } from '@/helpers/constants';
 
 interface WatchedRatingSlider {
     imdbID: string,
@@ -60,6 +61,7 @@ function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroun
                 }}
                 px={3}
                 textAlign="center"
+                borderRightRadius={i == 4 ? 5 : 0}
             >
                 <StarIcon />
             </Center>
@@ -70,7 +72,7 @@ function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroun
     }
 
     return (
-        <Flex borderWidth={1} borderLeft={1} borderRadius={0}>
+        <Flex borderWidth={1} borderLeft={1} borderRightRadius={5} borderColor={COLOR_SCHEMES.yellow}>
         {renderStars()}
         </Flex>
     );
@@ -85,10 +87,10 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
     const isWatched = bookmarkedMovie.isWatched;
     const rating = bookmarkedMovie.rating;
 
-    const BASECOLOR = baseColor ? baseColor : 'gray.400';
-    const BASEBACKGROUNDCOLOR = baseBackgroundColor ? baseBackgroundColor : 'gray.700';
+    const BASECOLOR = baseColor ? baseColor : COLOR_SCHEMES.gray;
+    const BASEBACKGROUNDCOLOR = baseBackgroundColor ? baseBackgroundColor : COLOR_SCHEMES.main;
     const SELECTEDCOLOR = selectedColor ? selectedColor : 'yellow.400';
-    const SELECTEDBACKGROUNDCOLOR = selectedBackgroundColor ? selectedBackgroundColor : 'gray.700';
+    const SELECTEDBACKGROUNDCOLOR = selectedBackgroundColor ? selectedBackgroundColor : COLOR_SCHEMES.main;
     const HOVERINGCOLOR = hoveringColor ? hoveringColor : 'gray.400';
     const HOVERINGBACKGROUNDCOLOR = hoveringBackgroundColor ? hoveringBackgroundColor : 'gray.100';
 
@@ -104,24 +106,27 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
 
     return (
         <Flex onMouseEnter={() => setShowSlider(true)} onMouseLeave={() => setShowSlider(false)}>
-          <Button 
+          <Center 
             _hover={{
                 backgroundColor: HOVERINGBACKGROUNDCOLOR,
                 color: bookmarkedMovie.isWatched ? SELECTEDCOLOR : HOVERINGCOLOR
             }}
-            variant="outline" 
-            borderRadius={0}
             onClick={(e) => {
                 e.stopPropagation();
                 toggleIsWatched();
             }}
             backgroundColor={bookmarkedMovie.isWatched ? SELECTEDBACKGROUNDCOLOR : BASEBACKGROUNDCOLOR}
             color={bookmarkedMovie.isWatched ? SELECTEDCOLOR : BASECOLOR}
-            px={2}
+            px={3}
+            borderWidth={1}
+            borderColor={COLOR_SCHEMES.yellow}
+            py={2}
+            borderLeftRadius={5}
+            borderRightRadius={showSlider || bookmarkedMovie.rating ? 0 : 5}
             >
-            <ViewIcon 
+                <ViewIcon 
             />
-          </Button>
+          </Center>
           <>
             {
                 showSlider ? (
@@ -143,6 +148,8 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
                         onClick={(e) => e.stopPropagation()}
                         backgroundColor={SELECTEDBACKGROUNDCOLOR}
                         color={SELECTEDCOLOR} 
+                        borderRightRadius={5}
+                        borderColor={COLOR_SCHEMES.yellow}
                         >
                         <StarIcon mr={1}/>
                         <Text fontSize="md" as="b">{bookmarkedMovie.rating}</Text>

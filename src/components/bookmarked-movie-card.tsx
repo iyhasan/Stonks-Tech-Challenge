@@ -5,6 +5,7 @@ import { CloseIcon, StarIcon, ViewIcon } from "@chakra-ui/icons";
 import { Box, Slide, VStack, Button, Text, Flex, IconButton, Center, Card, CardHeader, CardBody, CardFooter, Image} from "@chakra-ui/react";
 import WatchedRatingSlider from './watched-rating-slider';
 import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER } from '@/helpers/constants';
+import { useRouter } from 'next/router';
 
 interface BookmarkedMovieCardProps {
     movie: BookmarkedMovie
@@ -16,8 +17,22 @@ const removeBookmark = (imdbID: string) => {
 
 function BookmarkedMovieCard ({ movie }: BookmarkedMovieCardProps) {
 
+  const router = useRouter();
+
+  const routeToMoviePage = () => {
+    router.push(`/movie/${movie.imdbID}`)
+  }
+  
+
     return (
-        <Card p="10px" backgroundColor="none" height="100%">
+        <Card 
+        p="10px"
+        backgroundColor="none" 
+        height="100%"
+        position="relative"
+        overflow="hidden"
+        >
+            <Image src="/film-reel.png" position="absolute" ml="50%" mt="30px"/>
             <CardHeader p={0}>
                 <Flex 
                   >

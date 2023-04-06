@@ -60,7 +60,17 @@ function BookmarkOverview() {
             minHeight="480px"
             borderWidth={3} 
             borderColor={COLOR_SCHEMES.third}
-            borderRadius={20}>
+            borderRadius={20}
+            boxShadow="0px 2px 7px #ffffff"
+            cursor="pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              routeToMoviePage(bookmarkedMovie.imdbID)
+            }}  
+            _hover={{
+              backgroundColor: COLOR_SCHEMES.third
+            }}
+            >
               <BookmarkedMovieCard movie={bookmarkedMovie}/>
             </Box>
           ))}
