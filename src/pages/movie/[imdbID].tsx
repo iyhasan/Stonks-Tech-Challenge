@@ -5,54 +5,8 @@ import { BookmarkedMovie, FullMovieProfile, Rating } from '@/types';
 import { bookmarkStore } from '@/lib/store';
 import { StarIcon, AddIcon, ViewIcon } from '@chakra-ui/icons';
 import { reviewSourceToLogoUrl } from '@/helpers/constants';
+import RatingSlider from '@/components/rating-slider';
 
-interface RatingSliderProps {
-  imdbID: string;
-  bookmarkedInfo: BookmarkedMovie
-}
-
-function RatingSlider ({imdbID, bookmarkedInfo}: RatingSliderProps) {
-
-  const rating = bookmarkedInfo.rating;
-
-  const updateRating = (newRating: number) => {
-    bookmarkStore.getState().updateMovie(
-      imdbID,
-      {
-        ...bookmarkedInfo,
-        rating: newRating
-      }
-    )
-  }
-
-  const renderStars = () => {
-    const stars = [];
-
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <IconButton 
-          key={`star_${i}`}
-          icon={<StarIcon />}
-          backgroundColor="gray.700"
-          color={i < rating ? 'yellow.400' : 'gray.400'}
-          onClick={(e) => updateRating(i+1)}
-          aria-label={`Rate ${i+1}`}
-          _hover={{
-            backgroundColor: 'gray.100'
-          }}
-        />
-      )
-    }
-
-    return stars;
-  }
-
-  return (
-    <Flex borderWidth={1} borderRadius={8}>
-      {renderStars()}
-    </Flex>
-  );
-}
 
 function parseRating(ratingStr: string) {
   let percentage;
@@ -90,7 +44,7 @@ const MovieOverview = () => {
 
   useEffect(() => {
 
-    setReviewText(bookmarkedInfo?.review)
+    setReviewText(bookmarkedInfo?.review);
 
     if (imdbID) {
       fetch(`/api/movie?imdbID=${imdbID}`)
@@ -153,7 +107,7 @@ const MovieOverview = () => {
   return (
     (
         <Box width="100%" backgroundColor="gray.700" color="white" px={2}>
-          <Flex direction="row" maxHeight="300px"  width="100%" align="center" overflow="hidden">
+          <Flex direction="row" minHeight="300px" maxHeight="300px"  width="100%" align="center" overflow="hidden">
             <Image src={movie.Poster} objectFit="cover" />
             <Box ml={3} flex="1" overflowY="scroll">
               <Flex direction="row" alignItems="center">
