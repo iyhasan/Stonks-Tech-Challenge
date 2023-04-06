@@ -136,8 +136,15 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
                         selectedBackgroundColor={SELECTEDBACKGROUNDCOLOR}
                     />
                 ) : bookmarkedMovie.rating ? (
-                    <Center px={2} borderWidth={1} borderLeft={1} onClick={(e) => e.stopPropagation()}>
-                        <StarIcon color={SELECTEDCOLOR} mr={1}/>
+                    <Center 
+                        px={2} 
+                        borderWidth={1} 
+                        borderLeft={1} 
+                        onClick={(e) => e.stopPropagation()}
+                        backgroundColor={SELECTEDBACKGROUNDCOLOR}
+                        color={SELECTEDCOLOR} 
+                        >
+                        <StarIcon mr={1}/>
                         <Text fontSize="md" as="b">{bookmarkedMovie.rating}</Text>
                     </Center>
                 ) : null

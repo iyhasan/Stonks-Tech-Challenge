@@ -5,3 +5,11 @@ export const reviewSourceToLogoUrl = {
 }
 
 export const PLACEHOLDER_MOVIE_POSTER = "https://media.istockphoto.com/id/1138225809/vector/cinema-camera-icon-or-logo-isolated-on-white-background-movie-time-concept-creative-template.jpg?s=1024x1024&w=is&k=20&c=Uy1bbzT6Yom9UJM2qW3Jpog4lkQUy16HZLgJz6KMiJI="
+
+export const COLOR_SCHEMES = {
+    main: '#090f16',
+    secondary: "#141414",
+    third: "#2e3239",
+    fontMain: "white",
+    yellow: "yellow.400"
+}

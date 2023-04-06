@@ -1,6 +1,7 @@
 import { Box, Flex, Text, Link, Spacer } from '@chakra-ui/react';
 import Search from '@/components/search';
 import { useRouter } from 'next/router';
+import { COLOR_SCHEMES } from '@/helpers/constants';
 
 interface PathType {
     path: string,
@@ -25,7 +26,7 @@ const NavBar = () => {
   const router = useRouter();
 
   return (
-    <Box bg="gray.700" py={4}>
+    <Box bg={COLOR_SCHEMES.main} py={4}>
       <Flex alignItems="center">
         {paths.map((pathObj, index) => (
             <Link
