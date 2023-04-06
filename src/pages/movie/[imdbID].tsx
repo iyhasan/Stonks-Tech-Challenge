@@ -6,6 +6,7 @@ import { bookmarkStore } from '@/lib/store';
 import { StarIcon, AddIcon, ViewIcon } from '@chakra-ui/icons';
 import { reviewSourceToLogoUrl } from '@/helpers/constants';
 import RatingSlider from '@/components/rating-slider';
+import WatchedRatingSlider from '@/components/watched-rating-slider';
 
 
 function parseRating(ratingStr: string) {
@@ -132,22 +133,11 @@ const MovieOverview = () => {
                   <>
                   {
                     bookmarkedInfo ? (
-                      <Flex>
-                        <IconButton 
-                          mr={3}
-                          aria-label="Watched movie?"
-                          variant="outline"
-                          ml={3}
-                          icon={<ViewIcon color={watchedIconColor}/>}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleMovieWatched(imdbID);
-                          }}
-                          _hover={{
-                            backgroundColor: 'gray.100'
-                          }} />
-                        <RatingSlider imdbID={imdbID} bookmarkedInfo={bookmarkedInfo}/>  
-                      </Flex>
+                      <Box ml={3}>
+                        <WatchedRatingSlider 
+                          imdbID={imdbID}
+                        />
+                      </Box>
                     ) : null
                   }
                   </>

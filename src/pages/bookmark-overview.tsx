@@ -3,11 +3,11 @@ import MovieList from "@/components/movie-list";
 import { bookmarkStore } from "@/lib/store"
 import { BookmarkedMovie } from "@/types"
 import { Movie } from "@/types/rapidapi-movies";
-import { Box, Text, Flex, Image, Center, VStack, IconButton } from '@chakra-ui/react';
+import { Box, Text, Flex, Image, Center, VStack, IconButton, Spacer } from '@chakra-ui/react';
 import { PLACEHOLDER_MOVIE_POSTER } from '@/helpers/constants';
 import { useRouter } from 'next/router';
-import RatingSlider from '@/components/rating-slider';
 import { AddIcon, CloseIcon, ViewIcon } from '@chakra-ui/icons';
+import WatchedRatingSlider from '@/components/watched-rating-slider';
 
 function BookmarkOverview() {
 
@@ -52,7 +52,7 @@ function BookmarkOverview() {
       <Box backgroundColor="gray.700" width="100%">
         <Flex wrap="wrap" justifyContent="center">
           {movieList.map((bookmarkedMovie: BookmarkedMovie) => (
-            <Box
+            <Flex
               key={bookmarkedMovie.imdbID}
               borderWidth={1}
               borderRadius={5}
@@ -68,6 +68,7 @@ function BookmarkOverview() {
                 backgroundColor: "gray.100",
                 color: "black"
               }}
+              direction="column"
             >
 
               <div>
@@ -104,28 +105,12 @@ function BookmarkOverview() {
                 </Text>
                 <Text>{bookmarkedMovie.movie.Year}</Text>
               </Box>
+              <Spacer/>
+              <Box width="100%">
+                  <WatchedRatingSlider imdbID={bookmarkedMovie.imdbID}/>  
+              </Box>
 
-              <Flex mt={3}>
-                  <IconButton 
-                    mr={3}
-                    aria-label="Watched movie?"
-                    variant="outline"
-                    ml={3}
-                    icon={<ViewIcon color={bookmarkedMovie.isWatched ? 'yellow.400' : "gray.400"}/>}
-                    _hover={{
-                      backgroundColor: 'gray.100',
-                      color: "gray.700"
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleMovieWatched(bookmarkedMovie)
-                    }}
-                    backgroundColor="gray.700" />
-                  < RatingSlider imdbID={bookmarkedMovie.imdbID} bookmarkedInfo={bookmarkedMovie}/>  
-
-              </Flex>
-
-            </Box>
+            </Flex>
           ))}
         </Flex>
       </Box>
