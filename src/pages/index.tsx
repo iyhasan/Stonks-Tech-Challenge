@@ -52,7 +52,7 @@ export default function Home() {
       </Box>
       <Box width="100%">
         <Text fontSize="2xl">Unwatched Movies</Text>
-        <MovieCardCarousel movieList={randomUnWatchedMovies} emptyMessage="No Movies Bookmarked" />
+        <MovieCardCarousel movieList={randomUnWatchedMovies} emptyMessage="No Unwatched Movies In Bookmark" />
       </Box>
     </Flex>
   )
