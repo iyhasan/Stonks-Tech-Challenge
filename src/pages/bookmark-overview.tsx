@@ -51,17 +51,16 @@ function BookmarkOverview() {
 
     return (
       <Box backgroundColor={COLOR_SCHEMES.main} width="100%">
-        <Flex wrap="wrap" justifyContent="center">
+        <Flex wrap="wrap" justifyContent="center" mx="auto">
           {movieList.map((bookmarkedMovie: BookmarkedMovie) => (
             <Box 
             m={2} 
             backgroundColor={COLOR_SCHEMES.secondary}
-            width="310px" 
+            width="300px" 
             minHeight="480px"
             borderWidth={3} 
             borderColor={COLOR_SCHEMES.third}
             borderRadius={20}
-            boxShadow="0px 2px 7px #ffffff"
             cursor="pointer"
             onClick={(e) => {
               e.stopPropagation()

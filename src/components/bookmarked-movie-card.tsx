@@ -32,14 +32,14 @@ function BookmarkedMovieCard ({ movie }: BookmarkedMovieCardProps) {
         position="relative"
         overflow="hidden"
         >
-            <Image src="/film-reel.png" position="absolute" ml="50%" mt="30px"/>
+            {/* <Image src="/film-reel.png" position="absolute" ml="50%" mt="30px"/> */}
             <CardHeader p={0}>
                 <Flex 
                   >
                         <CloseIcon
                         mt="10px" 
                         mb="20px" 
-                        mx="20px"
+                        mx="10px"
                         _hover={{
                             color: 'red'
                         }}
@@ -60,11 +60,11 @@ function BookmarkedMovieCard ({ movie }: BookmarkedMovieCardProps) {
                     borderRadius={5}
                     width="100%"
                     height="290px"
-                    objectFit="cover"
+                    objectFit="contain"
                 />
             </Center>
                 <Box color={COLOR_SCHEMES.fontMain}>
-                    <Text fontSize="24px" as="b">{movie.movie.Title}</Text>
+                    <Text fontSize="24px" as="b" noOfLines={[1]}>{movie.movie.Title}</Text>
                     <Text fontSize="16px">{movie.movie.Year}</Text>
                 </Box>
             </CardBody>
