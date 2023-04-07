@@ -46,6 +46,10 @@ const MovieOverview = () => {
   const [reviewText, setReviewText] = useState<string>(bookmarkedInfo ? bookmarkedInfo.review : '');
 
   useEffect(() => {
+    setReviewText(bookmarkedInfo?.review);
+  }, [bookmarkedInfo]);
+
+  useEffect(() => {
 
     setReviewText(bookmarkedInfo?.review);
 
@@ -103,10 +107,6 @@ const MovieOverview = () => {
 
   const gridList = [
     {
-      label: 'Languages',
-      valueList: movie.Language.split(',')
-    },
-    {
       label: 'Directed By',
       valueList: movie.Director.split(',')
     },
@@ -121,6 +121,10 @@ const MovieOverview = () => {
     {
       label: 'Genre',
       valueList: movie.Genre.split(',')
+    },
+    {
+      label: 'Languages',
+      valueList: movie.Language.split(',')
     },
     {
       label: 'Countries',

@@ -64,11 +64,11 @@ function BookmarkedMovieCard ({ movie }: BookmarkedMovieCardProps) {
                 />
             </Center>
                 <Box color={COLOR_SCHEMES.fontMain}>
-                    <Text fontSize="24px" as="b" noOfLines={[1]}>{movie.movie.Title}</Text>
-                    <Text fontSize="16px">{movie.movie.Year}</Text>
+                    <Text ml={2} fontSize="24px" as="b" noOfLines={[1]}>{movie.movie.Title}</Text>
+                    <Text ml={2} fontSize="16px">{movie.movie.Year}</Text>
                 </Box>
             </CardBody>
-            <CardFooter>
+            <CardFooter p={0} ml={2} my={4}>
                 <WatchedRatingSlider imdbID={movie.imdbID} />
             </CardFooter>
         </Card>

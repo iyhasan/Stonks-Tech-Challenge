@@ -47,11 +47,11 @@ export default function Home() {
   return (
     <Flex w={'100%'} align='center' justify='center' color={COLOR_SCHEMES.fontMain} direction="column" mb={20} px={10}>
       <Box width="100%">
-        <Text fontSize="2xl"> Latest Bookmarked</Text>
+        <Text fontSize="2xl" mb={10}> Latest Bookmarked</Text>
         <MovieCardCarousel movieList={latestBookmarked} emptyMessage="No Movies Bookmarked" />
       </Box>
       <Box width="100%">
-        <Text fontSize="2xl">Unwatched Movies</Text>
+        <Text fontSize="2xl" mb={10}>Unwatched Movies</Text>
         <MovieCardCarousel movieList={randomUnWatchedMovies} emptyMessage="No Unwatched Movies In Bookmark" />
       </Box>
     </Flex>

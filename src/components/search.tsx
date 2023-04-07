@@ -12,6 +12,7 @@ import MovieList from './movie-list';
 import { bookmarkStore } from '@/lib/store';
 import { BookmarkedMovie } from '@/types';
 import { useRouter } from 'next/router';
+import { COLOR_SCHEMES } from '@/helpers/constants';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -70,17 +71,22 @@ const Search = () => {
   };
 
   return (
-    <Box w={'50%'} backgroundColor='white'>
+    <Box w={'50%'} backgroundColor={COLOR_SCHEMES.main}>
       <form onSubmit={handleSubmit}>
-        <Flex alignItems="center" direction="row">
+        <Flex alignItems="center" direction="row" borderBottomWidth={1} borderColor={COLOR_SCHEMES.yellow}>
           <Input
             type="text"
             placeholder="Search for a movie"
             value={searchTerm}
             onChange={handleChange}
-            borderRadius={0}
+            borderWidth={0}
+            focusBorderColor={COLOR_SCHEMES.main}
+            color={COLOR_SCHEMES.white}
+            mb={1}
           />
-          <Button type="submit" borderRadius="0">
+          <Button type="submit" borderRadius="0" backgroundColor={COLOR_SCHEMES.main} color={COLOR_SCHEMES.yellow} _hover={{
+            backgroundColor: COLOR_SCHEMES.main
+          }}>
             <SearchIcon />
           </Button>
         </Flex>

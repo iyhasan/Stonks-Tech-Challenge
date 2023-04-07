@@ -79,6 +79,7 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
             backgroundColor={currentIndex !== 0 ? COLOR_SCHEMES.yellow : COLOR_SCHEMES.third}
             mx={10}
             cursor="pointer"
+            color={COLOR_SCHEMES.main}
             >
                 <ChevronLeftIcon fontSize="24px" />
             </Box>
@@ -96,6 +97,7 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
             backgroundColor={COLOR_SCHEMES.yellow}
             mx={10}
             cursor="pointer"
+            color={COLOR_SCHEMES.main}
             >
                 <ChevronRightIcon fontSize="24px" />
             </Box>
@@ -111,7 +113,8 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
 
                     return (
                         <Box
-                        transform={(index - 1) ? `rotateY(${55*(index-1)*-1}deg) scale(0.9) translateX(${-60*(index-1)}%)` : ''}
+                        // transform={(index - 1) ? `rotateY(${55*(index-1)*-1}deg) scale(0.9) translateX(${-60*(index-1)}%) translateY(-10%) skew(0deg, ${-10*(index-1)}deg)` : ''}
+                        transform={(index-1) ? `scale(0.85) translateX(${-30*(index-1)}%)` : ''}
                         m={2} 
                         backgroundColor={COLOR_SCHEMES.secondary}
                         width="300px" 

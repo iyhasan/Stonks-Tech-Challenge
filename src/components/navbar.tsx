@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Link, Spacer } from '@chakra-ui/react';
+import { Box, Flex, Text, Link, Spacer, useToken } from '@chakra-ui/react';
 import Search from '@/components/search';
 import { useRouter } from 'next/router';
 import { COLOR_SCHEMES } from '@/helpers/constants';
@@ -28,7 +28,22 @@ const NavBar = () => {
   return (
     <Box bg={COLOR_SCHEMES.main} py={4}>
       <Flex alignItems="center">
-        {paths.map((pathObj, index) => (
+        {
+          paths.filter((p) => p.path === '/').map((pathObj, index) => (
+            <Link
+              key={`Home_NAVBAR`}
+              href={pathObj.path}
+              mx={4}
+              fontWeight={router.pathname === pathObj.path ? 'bold' : 'normal'}
+              fontSize="lg"
+              bgClip="text"
+              bgGradient={pathObj.path === '/' ? `linear-gradient(90deg, ${useToken('colors', COLOR_SCHEMES.orange)} 0%, ${useToken('colors', COLOR_SCHEMES.yellow)} 100%);` : pathObj.color}
+            >
+              {pathObj.label}
+            </Link>
+          ))
+        }
+        {paths.filter((p) => p.path !== '/').map((pathObj, index) => (
             <Link
               key={index}
               href={pathObj.path}
