@@ -192,8 +192,8 @@ const MovieOverview = () => {
 
               <Flex direction="column" mt="20px">
                 <Flex width="100%" justifyContent="space-around">
-                    { movie.Ratings.map((rating: Rating) => (
-                      <Box width="30%" py={10}>
+                    { movie.Ratings.map((rating: Rating, index: number) => (
+                      <Box key={`${index}_rating_source`} width="30%" py={10}>
                         <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
                         <Center>
                           <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
@@ -205,8 +205,8 @@ const MovieOverview = () => {
 
               <Grid templateColumns='repeat(5, 1fr)'>
                 {
-                  gridList.map((row) => (
-                    <>
+                  gridList.map((row, index) => (
+                    <div key={`${index}_grid_row`}>
                       <GridItem colSpan={1}>
                         <Flex align="center" height="100%">
                           {row.label}
@@ -216,6 +216,7 @@ const MovieOverview = () => {
                         <Flex direction="row">
                         {row.valueList.map((name: string) => (
                           <Box 
+                            key={`${index}_${name.replace(' ', '-')}`}
                             px={3} 
                             borderWidth={1} 
                             mr={3} 
@@ -228,7 +229,7 @@ const MovieOverview = () => {
                         ))}
                         </Flex>
                       </GridItem>
-                    </>
+                    </div>
                   ))
                 }
               </Grid>

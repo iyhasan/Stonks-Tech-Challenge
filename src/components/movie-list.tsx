@@ -49,7 +49,7 @@ function MovieList({ movieList, bookmarkAction, routeToMoviePage }: MovieListPro
 
             return (
               <Box 
-                key={index} 
+                key={`movie_list_${result.imdbID}`} 
                 p={2} 
                 borderWidth={1} 
                 borderRadius={0} 

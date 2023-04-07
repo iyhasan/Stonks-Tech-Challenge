@@ -45,7 +45,7 @@ const NavBar = () => {
         }
         {paths.filter((p) => p.path !== '/').map((pathObj, index) => (
             <Link
-              key={index}
+              key={`${pathObj.label}_NAVBAR`}
               href={pathObj.path}
               mx={4}
               fontWeight={router.pathname === pathObj.path ? 'bold' : 'normal'}

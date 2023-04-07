@@ -54,6 +54,7 @@ function BookmarkOverview() {
         <Flex wrap="wrap" justifyContent="center" mx="auto">
           {movieList.map((bookmarkedMovie: BookmarkedMovie) => (
             <Box 
+            key={`bookmark_overview_${bookmarkedMovie.imdb}`}
             m={2} 
             backgroundColor={COLOR_SCHEMES.secondary}
             width="300px" 

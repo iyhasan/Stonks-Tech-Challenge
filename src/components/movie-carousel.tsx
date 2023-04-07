@@ -108,12 +108,12 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
                 cardsToRender().map((movie, index) => {
 
                     if (!movie) return (
-                        <Box width="300px"></Box>
+                        <Box key={`movie_carousel_empty_${index}`} width="300px"></Box>
                     )
 
                     return (
                         <Box
-                        // transform={(index - 1) ? `rotateY(${55*(index-1)*-1}deg) scale(0.9) translateX(${-60*(index-1)}%) translateY(-10%) skew(0deg, ${-10*(index-1)}deg)` : ''}
+                        key={`movie_carousel_${movie.imdbID}_${index}`} 
                         transform={(index-1) ? `scale(0.85) translateX(${-30*(index-1)}%)` : ''}
                         m={2} 
                         backgroundColor={COLOR_SCHEMES.secondary}
