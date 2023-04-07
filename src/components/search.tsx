@@ -18,7 +18,7 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [results, setResults] = useState<Movie[]>([]);
 
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useOutsideClick({
@@ -49,7 +49,7 @@ const Search = () => {
     router.push(`/movie/${imdbID}`)
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
 
@@ -65,7 +65,7 @@ const Search = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     searchMovies();
   };

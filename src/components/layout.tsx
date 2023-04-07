@@ -3,7 +3,11 @@ import NavBar from './navbar';
 import Footer from './footer';
 import { COLOR_SCHEMES } from '@/helpers/constants';
 
-function Layout({ children }) {
+interface LayoutProps {
+  children: any
+}
+
+function Layout({ children }: LayoutProps) {
   return (
     <Flex minHeight="100vh" flexDirection="column" backgroundColor={COLOR_SCHEMES.main}>
       <NavBar />

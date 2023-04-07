@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import MovieList from "@/components/movie-list";
 import { bookmarkStore } from "@/lib/store"
 import { BookmarkedMovie } from "@/types"
-import { Movie } from "@/types/rapidapi-movies";
-import { Box, Text, Flex, Image, Center, VStack, IconButton, Spacer } from '@chakra-ui/react';
-import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER } from '@/helpers/constants';
+import { Box, Flex } from '@chakra-ui/react';
+import { COLOR_SCHEMES } from '@/helpers/constants';
 import { useRouter } from 'next/router';
-import { AddIcon, CloseIcon, ViewIcon } from '@chakra-ui/icons';
-import WatchedRatingSlider from '@/components/watched-rating-slider';
 import BookmarkedMovieCard from '@/components/bookmarked-movie-card';
 
 function BookmarkOverview() {
@@ -54,7 +50,7 @@ function BookmarkOverview() {
         <Flex wrap="wrap" justifyContent="center" mx="auto">
           {movieList.map((bookmarkedMovie: BookmarkedMovie) => (
             <Box 
-            key={`bookmark_overview_${bookmarkedMovie.imdb}`}
+            key={`bookmark_overview_${bookmarkedMovie.imdbID}`}
             m={2} 
             backgroundColor={COLOR_SCHEMES.secondary}
             width="300px" 

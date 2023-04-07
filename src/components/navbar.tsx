@@ -6,7 +6,7 @@ import { COLOR_SCHEMES } from '@/helpers/constants';
 interface PathType {
     path: string,
     label: string,
-    color: string | null,
+    color: string,
 }
 
 const paths = [
@@ -18,7 +18,7 @@ const paths = [
   {
     path: '/bookmark-overview',
     label: 'Bookmarked Movies',
-    color: null,
+    color: COLOR_SCHEMES.fontMain,
   },
 ];
 

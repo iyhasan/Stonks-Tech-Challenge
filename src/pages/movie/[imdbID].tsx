@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react';
 import { BookmarkedMovie, FullMovieProfile, Rating } from '@/types';
 import { bookmarkStore } from '@/lib/store';
 import { StarIcon, AddIcon, ViewIcon } from '@chakra-ui/icons';
-import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER, reviewSourceToLogoUrl } from '@/helpers/constants';
+import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER, reviewSourceToLogoUrl, REVIEW_SOURCE_KEY} from '@/helpers/constants';
 import RatingSlider from '@/components/rating-slider';
 import WatchedRatingSlider from '@/components/watched-rating-slider';
-import { TrailerInfo } from "@/types/imdb-api"
 
 
 function parseRating(ratingStr: string) {
@@ -37,22 +36,21 @@ const MovieOverview = () => {
   const router = useRouter();
   const { imdbID } = router.query;
   const [movie, setMovie] = useState<FullMovieProfile | null>(null);
-  const [imdbTrailer, setImdbTrailed] = useState<TrailerInfo | null>(null);
   const [ORANGE, YELLOW] = useToken('colors', [COLOR_SCHEMES.orange, COLOR_SCHEMES.yellow]);
 
-  const bookmarkedInfo = bookmarkStore((state) => state.fetchById(imdbID));
+  const bookmarkedInfo = bookmarkStore((state) => state.fetchById(imdbID as string));
   const bookmarkIconColor = !!bookmarkedInfo ? 'yellow.400' : 'gray';
   const watchedIconColor = !!bookmarkedInfo && bookmarkedInfo.isWatched ? 'yellow.400' : 'gray';
 
   const [reviewText, setReviewText] = useState<string>(bookmarkedInfo ? bookmarkedInfo.review : '');
 
   useEffect(() => {
-    setReviewText(bookmarkedInfo?.review);
+    setReviewText(bookmarkedInfo?.review || '');
   }, [bookmarkedInfo]);
 
   useEffect(() => {
 
-    setReviewText(bookmarkedInfo?.review);
+    setReviewText(bookmarkedInfo?.review || '');
 
     if (imdbID) {
       fetch(`/api/movie?imdbID=${imdbID}`)
@@ -91,7 +89,7 @@ const MovieOverview = () => {
   const toggleMovieWatched = () => {
     if (!bookmarkedInfo) return;
 
-    bookmarkStore.getState().updateMovie(imdbID, {
+    bookmarkStore.getState().updateMovie(imdbID as string, {
       ...bookmarkedInfo,
       isWatched: !bookmarkedInfo.isWatched
     })
@@ -100,7 +98,7 @@ const MovieOverview = () => {
   const handleUpdateReview = () => {
     if (!bookmarkedInfo) return;
 
-    bookmarkStore.getState().updateMovie(imdbID, {
+    bookmarkStore.getState().updateMovie(imdbID as string, {
       ...bookmarkedInfo,
       review: reviewText,
     })
@@ -159,7 +157,7 @@ const MovieOverview = () => {
                   <Center 
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleMovieBookmark(imdbID);
+                      toggleMovieBookmark(imdbID as string);
                     }}
                     _hover={{
                       backgroundColor: 'gray.100'
@@ -179,7 +177,13 @@ const MovieOverview = () => {
                       bookmarkedInfo ? (
                         <Box ml={3}>
                           <WatchedRatingSlider 
-                            imdbID={imdbID}
+                            imdbID={imdbID as string}
+                            baseColor={null}
+                            baseBackgroundColor={null}
+                            hoveringColor={null}
+                            hoveringBackgroundColor={null}
+                            selectedBackgroundColor={null}
+                            selectedColor={null}
                           />
                         </Box>
                       ) : null
@@ -195,7 +199,7 @@ const MovieOverview = () => {
                 <Flex width="100%" justifyContent="space-around">
                     { movie.Ratings.map((rating: Rating, index) => (
                       <Box key={`movie_rating_${index+1}`} width="30%" py={10}>
-                        <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
+                        <Image src={reviewSourceToLogoUrl[rating.Source as REVIEW_SOURCE_KEY]} height="50px" m="auto"/>
                         <Center>
                           <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
                         </Center>

@@ -69,7 +69,15 @@ function BookmarkedMovieCard ({ movie }: BookmarkedMovieCardProps) {
                 </Box>
             </CardBody>
             <CardFooter p={0} ml={2} my={4}>
-                <WatchedRatingSlider imdbID={movie.imdbID} />
+                <WatchedRatingSlider 
+                imdbID={movie.imdbID} 
+                baseColor={null}
+                baseBackgroundColor={null}
+                hoveringColor={null}
+                hoveringBackgroundColor={null}
+                selectedBackgroundColor={null}
+                selectedColor={null}
+                />
             </CardFooter>
         </Card>
     )
