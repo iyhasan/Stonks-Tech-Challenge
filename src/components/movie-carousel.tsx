@@ -36,8 +36,8 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
     
     if (!movieList.length) {
         return (
-            <Center>
-                <Text fontSize="2xl">{emptyMessage}</Text>
+            <Center minHeight="250px">
+                <Text fontSize="2xl" as="b">{emptyMessage}</Text>
             </Center>
         )
     }

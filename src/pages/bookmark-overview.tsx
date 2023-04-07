@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { bookmarkStore } from "@/lib/store"
 import { BookmarkedMovie } from "@/types"
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Center, Flex, Text } from '@chakra-ui/react';
 import { COLOR_SCHEMES } from '@/helpers/constants';
 import { useRouter } from 'next/router';
 import BookmarkedMovieCard from '@/components/bookmarked-movie-card';
@@ -42,6 +42,17 @@ function BookmarkOverview() {
       ...bookmarkedInfo,
       isWatched: !bookmarkedInfo.isWatched
     })
+  }
+
+  if (!movieList.length) {
+    return (
+      <Center width="100%">
+        <Flex color={COLOR_SCHEMES.fontMain} direction="column" align="center" justify="center" width="100%">
+          <Text fontSize="4xl" as="b">No Movies Bookmarked</Text>
+          <Text fontSize="xl">Search for movies and bookmark them using the + sign</Text>
+        </Flex>
+      </Center>
+    )
   }
   
 
