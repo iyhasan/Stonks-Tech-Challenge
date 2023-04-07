@@ -1,12 +1,13 @@
-import { Box, Flex, Heading, Image, Text, IconButton, Spacer, Center, Textarea, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Flex, Heading, Image, Text, IconButton, Spacer, Center, Textarea, Grid, GridItem, useToken } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { BookmarkedMovie, FullMovieProfile, Rating } from '@/types';
 import { bookmarkStore } from '@/lib/store';
 import { StarIcon, AddIcon, ViewIcon } from '@chakra-ui/icons';
-import { reviewSourceToLogoUrl } from '@/helpers/constants';
+import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER, reviewSourceToLogoUrl } from '@/helpers/constants';
 import RatingSlider from '@/components/rating-slider';
 import WatchedRatingSlider from '@/components/watched-rating-slider';
+import { TrailerInfo } from "@/types/imdb-api"
 
 
 function parseRating(ratingStr: string) {
@@ -36,6 +37,7 @@ const MovieOverview = () => {
   const router = useRouter();
   const { imdbID } = router.query;
   const [movie, setMovie] = useState<FullMovieProfile | null>(null);
+  const [imdbTrailer, setImdbTrailed] = useState<TrailerInfo | null>(null);
 
   const bookmarkedInfo = bookmarkStore((state) => state.fetchById(imdbID));
   const bookmarkIconColor = !!bookmarkedInfo ? 'yellow.400' : 'gray';
@@ -101,137 +103,163 @@ const MovieOverview = () => {
     })
   };
 
-  const languageList = movie.Language.split(',');
-  const directorList = movie.Director.split(',');
-  const writerList = movie.Writer.split(',')
+  const gridList = [
+    {
+      label: 'Languages',
+      valueList: movie.Language.split(',')
+    },
+    {
+      label: 'Directed By',
+      valueList: movie.Director.split(',')
+    },
+    {
+      label: 'Written By',
+      valueList: movie.Writer.split(',')
+    },
+    {
+      label: 'Actors',
+      valueList: movie.Actors.split(',')
+    },
+    {
+      label: 'Genre',
+      valueList: movie.Genre.split(',')
+    },
+    {
+      label: 'Countries',
+      valueList: movie.Country.split(',')
+    }
+  ]
 
   return (
     (
-        <Box width="100%" backgroundColor="gray.700" color="white" px={2}>
-          <Flex direction="row" minHeight="300px" maxHeight="300px"  width="100%" align="center" overflow="hidden">
-            <Image src={movie.Poster} objectFit="cover" />
-            <Box ml={3} flex="1" overflowY="scroll">
-              <Flex direction="row" alignItems="center">
-                <Text fontSize="5xl" as="b">{movie.Title}</Text>
-                <Box ml={5} borderWidth={3} borderRadius={5} px={3}>
-                  <Text fontSize="xl" as="b" >{movie.Rated}</Text>
-                </Box>
-              </Flex>
-              <Flex mt={3}>
-                <IconButton 
-                  aria-label="Bookmark Movie"
-                  variant="outline"
-                  icon={<AddIcon color={bookmarkIconColor}/>}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleMovieBookmark(imdbID);
-                  }}
-                  _hover={{
-                    backgroundColor: 'gray.100'
-                  }} />
+        <Box width="100%" backgroundColor={COLOR_SCHEMES.main} color="white" px={2}>
 
-                  <>
-                  {
-                    bookmarkedInfo ? (
-                      <Box ml={3}>
-                        <WatchedRatingSlider 
-                          imdbID={imdbID}
-                        />
+          <Flex>
+            <Box pl="5%" flexGrow={1}>
+
+              <Box>
+                <Flex direction="row" alignItems="center" justifyItems="center">
+                  <Text 
+                  fontSize="4xl" 
+                  as="b"
+                  bgClip="text"
+                  bgGradient={`linear-gradient(90deg, ${useToken('colors', COLOR_SCHEMES.orange)} 0%, ${useToken('colors', COLOR_SCHEMES.yellow)} 100%);`}
+                  >{movie.Title}</Text>
+                  <Box ml={5} borderWidth={2} borderRadius={5} px={3} color="yellow.400" borderColor="yellow.400">
+                    <Text fontSize="xl" as="b" >{movie.Rated}</Text>
+                  </Box>
+                </Flex>
+              </Box>
+
+              <Box>
+                <Flex mt={3}>
+                  <Center 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMovieBookmark(imdbID);
+                    }}
+                    _hover={{
+                      backgroundColor: 'gray.100'
+                    }}
+                    borderWidth={1}
+                    borderColor={COLOR_SCHEMES.yellow}
+                    borderRadius={5}
+                    px={3}
+                    py={2}
+                    color={bookmarkIconColor}
+                    >
+                      <AddIcon />
+                    </Center>
+
+                    <>
+                    {
+                      bookmarkedInfo ? (
+                        <Box ml={3}>
+                          <WatchedRatingSlider 
+                            imdbID={imdbID}
+                          />
+                        </Box>
+                      ) : null
+                    }
+                    </>
+                </Flex>
+              </Box>
+
+
+
+
+              <Flex direction="column">
+                <Flex width="100%" justifyContent="space-around">
+                    { movie.Ratings.map((rating: Rating) => (
+                      <Box width="30%" py={5}>
+                        <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
+                        <Center>
+                          <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
+                        </Center>
                       </Box>
-                    ) : null
-                  }
-                  </>
+                    ))}
+                </Flex>
               </Flex>
+
+              <>
+              {
+                bookmarkedInfo ? (
+                  <Grid templateColumns='repeat(5, 1fr)'>
+                    <GridItem colSpan={1}>
+                      <Flex align="center" height="100%">
+                        My Review
+                      </Flex>
+                    </GridItem>
+                    <GridItem colSpan={4}>
+                      <Textarea
+                              mt={3}
+                              borderColor={COLOR_SCHEMES.yellow}
+                              placeholder="Write your review here..."
+                              value={reviewText}
+                              onChange={(e) => setReviewText(e.target.value)}
+                              onBlur={handleUpdateReview}
+                            />
+                    </GridItem>
+                  </Grid>
+                ) : null
+              }
+              </>
+
+              <Grid templateColumns='repeat(5, 1fr)'>
+                {
+                  gridList.map((row) => (
+                    <>
+                      <GridItem colSpan={1}>
+                        <Flex align="center" height="100%">
+                          {row.label}
+                        </Flex>
+                      </GridItem>
+                      <GridItem colSpan={4}>
+                        <Flex direction="row">
+                        {row.valueList.map((name: string) => (
+                          <Box 
+                            px={3} 
+                            borderWidth={1} 
+                            mr={3} 
+                            my={2} 
+                            py={1}
+                            borderRadius={5}
+                            borderColor={COLOR_SCHEMES.yellow}>
+                            <Text fontSize="md">{name}</Text>
+                          </Box>
+                        ))}
+                        </Flex>
+                      </GridItem>
+                    </>
+                  ))
+                }
+              </Grid>
+
+            </Box>
+            <Box flexGrow={1} px={5}>
+              <Image width="100%" src={movie.Poster !== "N/A" ? movie.Poster : PLACEHOLDER_MOVIE_POSTER} objectFit="contain" />
             </Box>
           </Flex>
-
-          <Box pl="5%">
-            <Flex direction="column">
-              <Flex width="100%" justifyContent="space-around">
-                  { movie.Ratings.map((rating: Rating) => (
-                    <Box width="30%" py={5}>
-                      <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
-                      <Center>
-                        <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
-                      </Center>
-                    </Box>
-                  ))}
-              </Flex>
-            </Flex>
-
-            <Grid templateColumns='repeat(5, 1fr)'>
-              <GridItem colSpan={1}>Directed By</GridItem>
-              <GridItem colSpan={4}>
-                <Flex direction="row">
-                {directorList.map((name: string) => (
-                  <Box 
-                    px={3} 
-                    borderWidth={1} 
-                    mr={3} 
-                    my={2} 
-                    py={1}
-                    borderRadius={5}>
-                    <Text fontSize="md">{name}</Text>
-                  </Box>
-                ))}
-                </Flex>
-              </GridItem>
-
-              <GridItem colSpan={1}>Written By</GridItem>
-              <GridItem colSpan={4}>
-                <Flex direction="row">
-                {writerList.map((name: string) => (
-                  <Box 
-                    px={3} 
-                    borderWidth={1} 
-                    mr={3} 
-                    my={2} 
-                    py={1}
-                    borderRadius={5}>
-                    <Text fontSize="md">{name}</Text>
-                  </Box>
-                ))}
-                </Flex>
-              </GridItem>
-              
-              <GridItem colSpan={1}>Languages</GridItem>
-              <GridItem colSpan={4}>
-                <Flex direction="row">
-                {languageList.map((language: string) => (
-                  <Box 
-                    px={3} 
-                    borderWidth={1} 
-                    mr={3} 
-                    my={2} 
-                    py={1}
-                    borderRadius={5}>
-                    <Text fontSize="md">{language}</Text>
-                  </Box>
-                ))}
-                </Flex>
-              </GridItem>
-            </Grid>
-
-            <>
-            {
-              bookmarkedInfo ? (
-                <Grid templateColumns='repeat(5, 1fr)'>
-                  <GridItem colSpan={1}>My Review</GridItem>
-                  <GridItem colSpan={4}>
-                    <Textarea
-                            mt={3}
-                            placeholder="Write your review here..."
-                            value={reviewText}
-                            onChange={(e) => setReviewText(e.target.value)}
-                            onBlur={handleUpdateReview}
-                          />
-                  </GridItem>
-                </Grid>
-              ) : null
-            }
-            </>
-
-          </Box>
 
           
            

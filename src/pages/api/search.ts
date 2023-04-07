@@ -81,6 +81,11 @@ export default function handler(req, res) {
     
     const { s } = req.query
 
+    // TODO: Remove this
+    res.status(200).json(sampleResponse);
+    return;
+
+
     axios.request({
         method: 'GET',
         url: `https://${process.env.API_HOST}`,

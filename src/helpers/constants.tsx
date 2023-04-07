@@ -15,4 +15,5 @@ export const COLOR_SCHEMES = {
     gray: "gray.500",
     green: "#4dad03",
     white: "white",
+    orange: 'orange.400',
 }

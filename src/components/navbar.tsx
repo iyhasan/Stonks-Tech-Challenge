@@ -13,7 +13,7 @@ const paths = [
   {
     path: '/',
     label: 'Home',
-    color: 'blue.100',
+    color: COLOR_SCHEMES.yellow,
   },
   {
     path: '/bookmark-overview',

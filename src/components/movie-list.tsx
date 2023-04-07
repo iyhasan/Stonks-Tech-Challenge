@@ -1,5 +1,6 @@
-// Not generic - should only be used by search component due to 
-// weird styling
+// Not generic - built for use with search component
+// bad structuring on my part
+
 import { Movie } from "@/types/rapidapi-movies";
 import {
     Box,
@@ -12,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { bookmarkStore } from "@/lib/store";
+import { COLOR_SCHEMES, PLACEHOLDER_MOVIE_POSTER } from "@/helpers/constants";
 
 interface MovieListProps {
     movieList: Movie[],
@@ -33,7 +35,14 @@ function MovieList({ movieList, bookmarkAction, routeToMoviePage }: MovieListPro
 
     
     return (
-        <SimpleGrid columns={1} position='absolute' w='100%' background="white" maxHeight="500px" overflowY="scroll">
+        <SimpleGrid 
+        columns={1} 
+        position='absolute' 
+        w='100%' 
+        background="white" 
+        maxHeight="500px" 
+        overflowY="scroll"
+        >
           {movieList.map((result, index) => {
 
             const bookmarkIconColor = !!intersectionMovies.find((mov) => mov.imdbID == result.imdbID) ? 'yellow.400' : 'gray'
@@ -45,13 +54,14 @@ function MovieList({ movieList, bookmarkAction, routeToMoviePage }: MovieListPro
                 borderWidth={1} 
                 borderRadius={0} 
                 _hover={{
-                  backgroundColor: 'gray.800',
+                  backgroundColor: COLOR_SCHEMES.main,
                   color: 'white',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  borderColor: COLOR_SCHEMES.main
                 }}
                 onClick={() => routeToMoviePage(result.imdbID)}>
-                <Flex flexDirection="row">
-                  <Image src={result.Poster} alt={'Img missing'} height='80px' width='80px'/>
+                <Flex flexDirection="row" alignItems="center">
+                  <Image src={result.Poster !== 'N/A' ? result.Poster : PLACEHOLDER_MOVIE_POSTER} alt={'Img missing'} height='80px' width='60px'/>
                   <Box ml={3}>
                     <Text fontWeight="bold">{result.Title}</Text>
                     <Text>Year: {result.Year}</Text>
