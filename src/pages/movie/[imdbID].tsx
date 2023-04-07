@@ -38,6 +38,7 @@ const MovieOverview = () => {
   const { imdbID } = router.query;
   const [movie, setMovie] = useState<FullMovieProfile | null>(null);
   const [imdbTrailer, setImdbTrailed] = useState<TrailerInfo | null>(null);
+  const [ORANGE, YELLOW] = useToken('colors', [COLOR_SCHEMES.orange, COLOR_SCHEMES.yellow]);
 
   const bookmarkedInfo = bookmarkStore((state) => state.fetchById(imdbID));
   const bookmarkIconColor = !!bookmarkedInfo ? 'yellow.400' : 'gray';
@@ -145,7 +146,7 @@ const MovieOverview = () => {
                   fontSize="5xl" 
                   as="b"
                   bgClip="text"
-                  bgGradient={`linear-gradient(90deg, ${useToken('colors', COLOR_SCHEMES.orange)} 0%, ${useToken('colors', COLOR_SCHEMES.yellow)} 100%);`}
+                  bgGradient={`linear-gradient(90deg, ${ORANGE} 0%, ${YELLOW} 100%);`}
                   >{movie.Title}</Text>
                   <Box ml={4} borderWidth={2} mt={2} borderRadius={5} px={3} color="yellow.400" borderColor="yellow.400">
                     <Text fontSize="xl" as="b" >{movie.Rated}</Text>
@@ -192,8 +193,8 @@ const MovieOverview = () => {
 
               <Flex direction="column" mt="20px">
                 <Flex width="100%" justifyContent="space-around">
-                    { movie.Ratings.map((rating: Rating, index: number) => (
-                      <Box key={`${index}_rating_source`} width="30%" py={10}>
+                    { movie.Ratings.map((rating: Rating, index) => (
+                      <Box key={`movie_rating_${index+1}`} width="30%" py={10}>
                         <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
                         <Center>
                           <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
@@ -203,10 +204,10 @@ const MovieOverview = () => {
                 </Flex>
               </Flex>
 
-              <Grid templateColumns='repeat(5, 1fr)'>
+              
                 {
                   gridList.map((row, index) => (
-                    <div key={`${index}_grid_row`}>
+                    <Grid key={`movie_info_row_${index}`} templateColumns='repeat(5, 1fr)'>
                       <GridItem colSpan={1}>
                         <Flex align="center" height="100%">
                           {row.label}
@@ -214,9 +215,9 @@ const MovieOverview = () => {
                       </GridItem>
                       <GridItem colSpan={4}>
                         <Flex direction="row">
-                        {row.valueList.map((name: string) => (
+                        {row.valueList.map((name: string, colIdx: number) => (
                           <Box 
-                            key={`${index}_${name.replace(' ', '-')}`}
+                            key={`${index+1}_${colIdx+1}_info`}
                             px={3} 
                             borderWidth={1} 
                             mr={3} 
@@ -229,10 +230,10 @@ const MovieOverview = () => {
                         ))}
                         </Flex>
                       </GridItem>
-                    </div>
+                    </Grid>
                   ))
                 }
-              </Grid>
+              
 
               <>
               {

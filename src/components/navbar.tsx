@@ -25,6 +25,8 @@ const paths = [
 const NavBar = () => {
   const router = useRouter();
 
+  const [ORANGE, YELLOW] = useToken('colors', [COLOR_SCHEMES.orange, COLOR_SCHEMES.yellow]);
+
   return (
     <Box bg={COLOR_SCHEMES.main} py={4}>
       <Flex alignItems="center">
@@ -37,7 +39,7 @@ const NavBar = () => {
               fontWeight={router.pathname === pathObj.path ? 'bold' : 'normal'}
               fontSize="lg"
               bgClip="text"
-              bgGradient={pathObj.path === '/' ? `linear-gradient(90deg, ${useToken('colors', COLOR_SCHEMES.orange)} 0%, ${useToken('colors', COLOR_SCHEMES.yellow)} 100%);` : pathObj.color}
+              bgGradient={pathObj.path === '/' ? `linear-gradient(90deg, ${ORANGE} 0%, ${YELLOW} 100%);` : pathObj.color}
             >
               {pathObj.label}
             </Link>
