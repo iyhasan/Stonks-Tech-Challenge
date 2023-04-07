@@ -43,7 +43,7 @@ const MovieOverview = () => {
   const bookmarkIconColor = !!bookmarkedInfo ? 'yellow.400' : 'gray';
   const watchedIconColor = !!bookmarkedInfo && bookmarkedInfo.isWatched ? 'yellow.400' : 'gray';
 
-  const [reviewText, setReviewText] = useState<string>('');
+  const [reviewText, setReviewText] = useState<string>(bookmarkedInfo ? bookmarkedInfo.review : '');
 
   useEffect(() => {
 
@@ -95,8 +95,6 @@ const MovieOverview = () => {
   const handleUpdateReview = () => {
     if (!bookmarkedInfo) return;
 
-    console.log(reviewText)
-
     bookmarkStore.getState().updateMovie(imdbID, {
       ...bookmarkedInfo,
       review: reviewText,
@@ -140,12 +138,12 @@ const MovieOverview = () => {
               <Box>
                 <Flex direction="row" alignItems="center" justifyItems="center">
                   <Text 
-                  fontSize="4xl" 
+                  fontSize="5xl" 
                   as="b"
                   bgClip="text"
                   bgGradient={`linear-gradient(90deg, ${useToken('colors', COLOR_SCHEMES.orange)} 0%, ${useToken('colors', COLOR_SCHEMES.yellow)} 100%);`}
                   >{movie.Title}</Text>
-                  <Box ml={5} borderWidth={2} borderRadius={5} px={3} color="yellow.400" borderColor="yellow.400">
+                  <Box ml={4} borderWidth={2} mt={2} borderRadius={5} px={3} color="yellow.400" borderColor="yellow.400">
                     <Text fontSize="xl" as="b" >{movie.Rated}</Text>
                   </Box>
                 </Flex>
@@ -188,10 +186,10 @@ const MovieOverview = () => {
 
 
 
-              <Flex direction="column">
+              <Flex direction="column" mt="20px">
                 <Flex width="100%" justifyContent="space-around">
                     { movie.Ratings.map((rating: Rating) => (
-                      <Box width="30%" py={5}>
+                      <Box width="30%" py={10}>
                         <Image src={reviewSourceToLogoUrl[rating.Source]} height="50px" m="auto"/>
                         <Center>
                           <Text color={scoreToColor(rating.Value)} m="auto" as="b" fontSize="xl" mt={2}>{parseRating(rating.Value)}%</Text>
@@ -200,30 +198,6 @@ const MovieOverview = () => {
                     ))}
                 </Flex>
               </Flex>
-
-              <>
-              {
-                bookmarkedInfo ? (
-                  <Grid templateColumns='repeat(5, 1fr)'>
-                    <GridItem colSpan={1}>
-                      <Flex align="center" height="100%">
-                        My Review
-                      </Flex>
-                    </GridItem>
-                    <GridItem colSpan={4}>
-                      <Textarea
-                              mt={3}
-                              borderColor={COLOR_SCHEMES.yellow}
-                              placeholder="Write your review here..."
-                              value={reviewText}
-                              onChange={(e) => setReviewText(e.target.value)}
-                              onBlur={handleUpdateReview}
-                            />
-                    </GridItem>
-                  </Grid>
-                ) : null
-              }
-              </>
 
               <Grid templateColumns='repeat(5, 1fr)'>
                 {
@@ -254,6 +228,30 @@ const MovieOverview = () => {
                   ))
                 }
               </Grid>
+
+              <>
+              {
+                bookmarkedInfo ? (
+                  <Grid templateColumns='repeat(5, 1fr)'>
+                    <GridItem colSpan={1}>
+                      <Flex align="center" height="100%">
+                        My Review
+                      </Flex>
+                    </GridItem>
+                    <GridItem colSpan={4}>
+                      <Textarea
+                              mt={3}
+                              borderColor={COLOR_SCHEMES.yellow}
+                              placeholder="Write your review here..."
+                              value={reviewText}
+                              onChange={(e) => setReviewText(e.target.value)}
+                              onBlur={handleUpdateReview}
+                            />
+                    </GridItem>
+                  </Grid>
+                ) : null
+              }
+              </>
 
             </Box>
             <Box flexGrow={1} px={5}>

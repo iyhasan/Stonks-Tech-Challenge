@@ -1,9 +1,119 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { bookmarkStore } from "@/lib/store";
 import { BookmarkedMovie } from "@/types";
 import { StarIcon, ViewIcon } from "@chakra-ui/icons";
-import { Box, Slide, VStack, Button, Text, Flex, IconButton, Center} from "@chakra-ui/react";
+import { 
+    Box, 
+    Slide, 
+    VStack, 
+    Button, 
+    Text, 
+    Flex, 
+    IconButton, 
+    Center,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    Textarea
+} from "@chakra-ui/react";
 import { COLOR_SCHEMES } from '@/helpers/constants';
+
+interface ReviewMovieModal {
+    movie: BookmarkedMovie,
+    isOpen: any,
+    onOpen: any,
+    onClose: any,
+}
+
+function ReviewModal ({ movie, isOpen, onOpen, onClose }: ReviewMovieModal) {
+
+    const [reviewText, setReviewText] = useState('');
+
+    useEffect(() => {
+        // set reviewText to the value of review
+        setReviewText(movie.review);
+    }, []);
+
+    const updateReview = () => {
+        bookmarkStore.getState().updateMovie(
+            movie.imdbID,
+            {
+                ...movie,
+                review: reviewText,
+            }
+            )
+        onClose();
+    }
+    
+    return (
+        <Modal 
+        isOpen={isOpen} 
+        onClose={onClose}
+        >
+        <ModalOverlay />
+        <ModalContent
+        backgroundColor={COLOR_SCHEMES.main} 
+        color={COLOR_SCHEMES.fontMain} 
+        borderColor={COLOR_SCHEMES.yellow} 
+        borderWidth={1}
+        borderRadius={5}
+        >
+          <ModalBody>
+            <Flex flexDirection="column">
+              <Text mr={3} as="b" my={4}>My Review:</Text>
+              <Textarea
+                borderColor={COLOR_SCHEMES.main}
+                _hover={{
+                    borderColor: COLOR_SCHEMES.main
+                }}
+                focusBorderColor={COLOR_SCHEMES.third}
+                placeholder="Write your review here..."
+                onChange={(e) => setReviewText(e.target.value)}
+                // onBlur={}
+              />
+            </Flex>
+            <Flex my={5}>
+                <Box
+                borderRadius={5}
+                px={3}
+                py={2}
+                borderWidth={1}
+                borderColor={COLOR_SCHEMES.yellow}
+                cursor="pointer"
+                onClick={(e) => {
+                    e.stopPropagation()
+                    onClose();
+                }}
+                >
+                    Close
+                </Box>
+                <Box 
+                ml={5}
+                backgroundColor={COLOR_SCHEMES.yellow}
+                borderRadius={5}
+                px={3}
+                py={2}
+                cursor="pointer"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    updateReview();
+                }}
+                >
+                    Save
+                </Box>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    )
+
+}
+
 
 interface WatchedRatingSlider {
     imdbID: string,
@@ -24,9 +134,11 @@ interface RatingSliderProps {
     hoveringColor: string,
     baseBackgroundColor: string,
     baseColor: string,
+    openModal: any
 }
 
-function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroundColor, hoveringColor, hoveringBackgroundColor, baseColor, baseBackgroundColor}: RatingSliderProps) {
+
+function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroundColor, hoveringColor, hoveringBackgroundColor, baseColor, baseBackgroundColor, openModal}: RatingSliderProps) {
 
     const rating = bookmarkedInfo.rating;
 
@@ -39,6 +151,8 @@ function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroun
             isWatched: true,
         }
         )
+
+        if (bookmarkedInfo.review.length == 0) openModal();
     }
 
     const renderStars = () => {
@@ -81,6 +195,7 @@ function RatingSlider ({imdbID, bookmarkedInfo, selectedColor, selectedBackgroun
 function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringColor, hoveringBackgroundColor, selectedColor, selectedBackgroundColor} : WatchedRatingSlider) {
     const [showSlider, setShowSlider] = useState(false);
     const bookmarkedMovie: BookmarkedMovie | undefined = bookmarkStore((state) => state.fetchById(imdbID));
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     if (!bookmarkedMovie) return null;
 
@@ -95,6 +210,9 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
     const HOVERINGBACKGROUNDCOLOR = hoveringBackgroundColor ? hoveringBackgroundColor : 'gray.100';
 
     const toggleIsWatched = () => {
+
+        const shouldOpenModal = !bookmarkedMovie.isWatched && bookmarkedMovie.review.length == 0;
+
         bookmarkStore.getState().updateMovie(
         imdbID,
         {
@@ -102,10 +220,14 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
             isWatched: !bookmarkedMovie.isWatched,
         }
         )
+
+        if (shouldOpenModal) onOpen();
+        
     }
 
     return (
         <Flex onMouseEnter={() => setShowSlider(true)} onMouseLeave={() => setShowSlider(false)}>
+            <ReviewModal movie={bookmarkedMovie} isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
           <Center 
             _hover={{
                 backgroundColor: HOVERINGBACKGROUNDCOLOR,
@@ -139,6 +261,7 @@ function WatchedRatingSlider ({imdbID, baseColor, baseBackgroundColor, hoveringC
                         hoveringBackgroundColor={HOVERINGBACKGROUNDCOLOR}
                         selectedColor={SELECTEDCOLOR}
                         selectedBackgroundColor={SELECTEDBACKGROUNDCOLOR}
+                        openModal={onOpen}
                     />
                 ) : bookmarkedMovie.rating ? (
                     <Center 
