@@ -83,7 +83,7 @@ function ReviewModal ({ movie, isOpen, onOpen, onClose }: ReviewMovieModal) {
                 px={3}
                 py={2}
                 borderWidth={1}
-                borderColor={COLOR_SCHEMES.yellow}
+                borderColor={COLOR_SCHEMES.third}
                 cursor="pointer"
                 onClick={(e) => {
                     e.stopPropagation()
@@ -95,6 +95,7 @@ function ReviewModal ({ movie, isOpen, onOpen, onClose }: ReviewMovieModal) {
                 <Box 
                 ml={5}
                 backgroundColor={COLOR_SCHEMES.yellow}
+                color={COLOR_SCHEMES.main}
                 borderRadius={5}
                 px={3}
                 py={2}
