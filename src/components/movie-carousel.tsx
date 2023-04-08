@@ -94,7 +94,7 @@ const MovieCardCarousel = ({ movieList, emptyMessage }: MovieCardCarouselProps) 
                 incrementByOne();
             }}
             p={3}
-            backgroundColor={COLOR_SCHEMES.yellow}
+            backgroundColor={currentIndex !== movieList.length - 1 ? COLOR_SCHEMES.yellow : COLOR_SCHEMES.third}
             mx={10}
             cursor="pointer"
             color={COLOR_SCHEMES.main}
