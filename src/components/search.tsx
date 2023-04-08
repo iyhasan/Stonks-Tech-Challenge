@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   useOutsideClick,
+  useToast,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons'
 import { Movie } from '@/types/rapidapi-movies';
@@ -20,6 +21,7 @@ const Search = () => {
 
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const toast = useToast()
 
   useOutsideClick({
     ref: ref,
@@ -61,6 +63,13 @@ const Search = () => {
     if (data.Response === 'True') {
       setResults([...data.Search])
     } else {
+      toast({
+        title: 'Error fetching movies',
+        description: data.Error,
+        status: "error",
+        duration: 5000,
+        isClosable: true
+      })
       setResults([])
     }
   };
